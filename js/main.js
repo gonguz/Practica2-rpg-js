@@ -52,9 +52,13 @@ battle.on('turn', function (data) {
       actualChar = this._charactersById[current];
       if(actualChar.hp <= 0){
         actualChar.party === 'monsters' ?
-        monstersHTML += `<li id="${current}" class=dead> ${actualChar.name} (HP: <strong>${actualChar.hp}</strong> / ${actualChar.maxHp}
-        , MP: <strong>${actualChar.mp}</strong> / ${actualChar.maxMp})</li>` : heroesHTML += `<li id="${current}" class=dead> ${actualChar.name} (HP: <strong>${actualChar.hp}</strong> / ${actualChar.maxHp}
-        , MP: <strong>${actualChar.mp}</strong> / ${actualChar.maxMp})</li>` ;
+        monstersHTML += '<li data-chara-id = "'+ current + ' "class=dead>' + actualChar.name +
+        '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
+        ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
+        '</li>' : heroesHTML += '<li data-chara-id = "'+ current + ' "class=dead>' + actualChar.name +
+        '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
+        ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
+        '</li>'
       }else{
           if(actualChar.party === 'heroes'){
             heroesHTML += '<li data-chara-id= "' + current + '">' +
@@ -133,9 +137,13 @@ battle.on('end', function (data) {
       actualChar = this._charactersById[current];
       if(actualChar.hp <= 0){
         actualChar.party === 'monsters' ?
-        monstersHTML += `<li id="${current}" class=dead> ${actualChar.name} (HP: <strong>${actualChar.hp}</strong> / ${actualChar.maxHp}
-        , MP: <strong>${actualChar.mp}</strong> / ${actualChar.maxMp})</li>` : heroesHTML += `<li id="${current}" class=dead> ${actualChar.name} (HP: <strong>${actualChar.hp}</strong> / ${actualChar.maxHp}
-        , MP: <strong>${actualChar.mp}</strong> / ${actualChar.maxMp})</li>` ;
+        monstersHTML += '<li data-chara-id = "'+ current + ' "class=dead>' + actualChar.name +
+        '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
+        ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
+        '</li>' : heroesHTML += '<li data-chara-id = "'+ current + ' "class=dead>' + actualChar.name +
+        '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
+        ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
+        '</li>'
       }else{
           if(actualChar.party === 'heroes'){
             heroesHTML += '<li data-chara-id= "' + current + '">' +
@@ -157,7 +165,7 @@ battle.on('end', function (data) {
     monsters.innerHTML = monstersHTML;
     // TODO: re-render the parties so the death of the last character gets reflected
     actionForm.style.display = 'none';
-    infoPanel.innerHTML = 'THE BATTLE WAS EXCITING, BUT ONLY ONE CAN REMAIN, CONGRATS ' + '<strong>' + data.winner + '</strong>';
+    infoPanel.innerHTML =  '<strong>' + data.winner + '</strong>:*THE BATTLE WAS EXCITING, BUT ONLY ONE CAN REMAIN*';
     resetForm.style.display = 'block';
 
     // TODO: display 'end of battle' message, showing who won
