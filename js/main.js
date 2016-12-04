@@ -18,7 +18,9 @@ battle.setup({
         ],
         grimoire: [
             RPG.entities.scrolls.health,
-            RPG.entities.scrolls.fireball
+            RPG.entities.scrolls.fireball,
+            RPG.entities.scrolls.thunderstorm,
+            RPG.entities.scrolls.mana
         ]
     },
     monsters: {
@@ -102,14 +104,18 @@ battle.on('info', function (data) {
     // TODO: display turn info in the #battle-info panel
     infoPanel = document.querySelector('#battle-info');
     var infoHTML = ' ';
-    var failedAction = '<strong> The action thrown by ' + data.activeCharacterId + ' was not succesful </strong>';
+    var failedAction = '<strong> The ' + data.action + ' thrown by ' + data.activeCharacterId + ' was not succesful </strong>';
     var effectsTxt = prettifyEffect(data.effect || {});
 
     if(data.action === 'attack'){
       infoHTML =  '<strong>' + data.activeCharacterId + '</strong> attacked ' + '<strong>'  + data.targetId + '</strong> and caused ' + effectsTxt;
     }else if(data.action === 'cast'){
-      infoHTML = '<strong>' + data.scrollName + '</strong> was thrown by ' + '<strong>' + data.activeCharacterId + '</strong>' +
-      ' and caused ' + '<strong>' + data.targetId + '</strong> ' + effectsTxt;
+      if(data.scrollName === 'mana'){
+        infoHTML = '<strong>' + data.targetId + '</strong> has recovered mana, but lost ' + effectsTxt;
+      }else {
+        infoHTML = '<strong>' + data.scrollName + '</strong> was thrown by ' + '<strong>' + data.activeCharacterId + '</strong>' +
+        ' and caused ' + '<strong>' + data.targetId + '</strong> ' + effectsTxt;
+      }
     }else if(data.action === 'defend'){
       infoHTML = '<strong>' + data.activeCharacterId + '</strong> used defense and its value is ' + '<strong>' + data.newDefense + '</strong>';
     }
@@ -273,12 +279,14 @@ window.onload = function () {
         }
 
         var targets;
-        if (chosenSpell === 'health'){
+
+        if (chosenSpell === 'health' || chosenSpell === 'mana'){
           targets = battle.characters.allFrom(actualParty);
         }
         else{
           targets = battle.characters.allFrom(enemies);
         }
+
         var targetArr = Object.keys(targets);
         var targetHTML = ' ';
         var iter = 0;

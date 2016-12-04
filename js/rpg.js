@@ -859,6 +859,9 @@ var lib = module.exports = {
     },
     get pseudopode() {
       return new items.Weapon('pseudopode', 5, new Effect({ mp: -5 }));
+    },
+    get bonesStorm() {
+      return new items.Weapon('bonesStorm', 15, new Effect({ mp: -10}));
     }
   },
 
@@ -888,7 +891,7 @@ var lib = module.exports = {
       return new Character('skeleton', {
         initiative: 9,
         defense: 50,
-        weapon: lib.weapons.sword,
+        weapon: lib.weapons.bonesStorm,
         hp: 100,
         mp: 0
       });
@@ -921,8 +924,16 @@ var lib = module.exports = {
       return new items.Scroll('health', 10, new Effect({ hp: 25 }));
     },
 
+    get mana() {
+      return new items.Scroll('mana', 0 , new Effect({hp: -5, mp: 10}));
+    },
+
     get fireball() {
       return new items.Scroll('fireball', 30, new Effect({ hp: -25 }));
+    },
+
+    get thunderstorm() {
+      return new items.Scroll('thunderstorm', 30, new Effect({ hp: -40}));
     }
 
   }
