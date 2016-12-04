@@ -925,7 +925,9 @@ var lib = module.exports = {
     },
 
     get mana() {
-      return new items.Scroll('mana', 0 , new Effect({hp: -5, mp: 10}));
+      return new items.Scroll('mana', 5 , new Effect({hp: -5, mp: 10}));
+      //Si se lanza al aliado quita 5 de mana al "lanzador", y resta 5 hp y suma 10 mp.
+      //Sin embargo si el lanzador la utiliza para sí mismo, resta 5 hp y suma 5 mp;
     },
 
     get fireball() {
