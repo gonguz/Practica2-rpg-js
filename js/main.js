@@ -33,6 +33,47 @@ battle.setup({
     }
 });
 
+function renderChars(){
+  var charList = Object.keys(battle._charactersById);
+  var typeOfChars = document.querySelectorAll('.character-list');
+  var heroes = typeOfChars[0];
+  var monsters = typeOfChars[1];
+  var actualChar;
+  var heroesHTML = ' ';
+  var monstersHTML = ' ';
+
+  charList.forEach(function(current){
+    actualChar = battle._charactersById[current];
+    if(actualChar.hp <= 0){
+      actualChar.party === 'monsters' ?
+      monstersHTML += '<li data-chara-id = "'+ current + ' "class=dead>' + actualChar.name +
+      '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
+      ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
+      '</li>' : heroesHTML += '<li data-chara-id = "'+ current + ' "class=dead>' + actualChar.name +
+      '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
+      ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
+      '</li>'
+    }else{
+        if(actualChar.party === 'heroes'){
+          heroesHTML += '<li data-chara-id= "' + current + '">' +
+          actualChar.name +
+          '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
+          ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
+          '</li>';
+        }else{
+          monstersHTML += '<li data-chara-id="' + current + '">' +
+          actualChar.name +
+          '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
+          ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
+          '</li>';
+        }
+      }
+  }, this);
+
+  heroes.innerHTML = heroesHTML;
+  monsters.innerHTML = monstersHTML;
+};
+
 battle.on('start', function (data) {
     console.log('START', data);
 });
@@ -41,45 +82,8 @@ battle.on('turn', function (data) {
     console.log('TURN', data);
 
     // TODO: render the characters
+    renderChars();
 
-    var charList = Object.keys(this._charactersById);
-    var typeOfChars = document.querySelectorAll('.character-list');
-    var heroes = typeOfChars[0];
-    var monsters = typeOfChars[1];
-    var actualChar;
-    var heroesHTML = ' ';
-    var monstersHTML = ' ';
-
-    charList.forEach(function(current){
-      actualChar = this._charactersById[current];
-      if(actualChar.hp <= 0){
-        actualChar.party === 'monsters' ?
-        monstersHTML += '<li data-chara-id = "'+ current + ' "class=dead>' + actualChar.name +
-        '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
-        ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
-        '</li>' : heroesHTML += '<li data-chara-id = "'+ current + ' "class=dead>' + actualChar.name +
-        '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
-        ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
-        '</li>'
-      }else{
-          if(actualChar.party === 'heroes'){
-            heroesHTML += '<li data-chara-id= "' + current + '">' +
-            actualChar.name +
-            '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
-            ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
-            '</li>';
-          }else{
-            monstersHTML += '<li data-chara-id="' + current + '">' +
-            actualChar.name +
-            '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
-            ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
-            '</li>';
-          }
-        }
-    }, this);
-
-    heroes.innerHTML = heroesHTML;
-    monsters.innerHTML = monstersHTML;
     // TODO: highlight current character
     var highlitedChar = document.querySelector('[data-chara-id="' + data.activeCharacterId + '"]');
     highlitedChar.classList.add("active");
@@ -131,44 +135,7 @@ battle.on('info', function (data) {
 
 battle.on('end', function (data) {
     console.log('END', data);
-    var charList = Object.keys(this._charactersById);
-    var typeOfChars = document.querySelectorAll('.character-list');
-    var heroes = typeOfChars[0];
-    var monsters = typeOfChars[1];
-    var actualChar;
-    var heroesHTML = ' ';
-    var monstersHTML = ' ';
-
-    charList.forEach(function(current){
-      actualChar = this._charactersById[current];
-      if(actualChar.hp <= 0){
-        actualChar.party === 'monsters' ?
-        monstersHTML += '<li data-chara-id = "'+ current + ' "class=dead>' + actualChar.name +
-        '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
-        ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
-        '</li>' : heroesHTML += '<li data-chara-id = "'+ current + ' "class=dead>' + actualChar.name +
-        '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
-        ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
-        '</li>'
-      }else{
-          if(actualChar.party === 'heroes'){
-            heroesHTML += '<li data-chara-id= "' + current + '">' +
-            actualChar.name +
-            '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
-            ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
-            '</li>';
-          }else{
-            monstersHTML += '<li data-chara-id="' + current + '">' +
-            actualChar.name +
-            '  (HP: <strong>' + actualChar.hp + '</strong>/' + actualChar.maxHp +
-            ',MP: <strong>' + actualChar.mp + '</strong>/' + actualChar.maxMp + ')' +
-            '</li>';
-          }
-        }
-    }, this);
-
-    heroes.innerHTML = heroesHTML;
-    monsters.innerHTML = monstersHTML;
+    renderChars();
     // TODO: re-render the parties so the death of the last character gets reflected
     actionForm.style.display = 'none';
     infoPanel.innerHTML =  '<strong>' + data.winner + '</strong>:*THE BATTLE WAS EXCITING, BUT ONLY ONE CAN REMAIN*';
